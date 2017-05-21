@@ -31,7 +31,7 @@ exports.countlikechange = functions.database.ref('/issues/{issueid}/votes').onWr
       })
       let mailOptions = {
         from: '"Fred Foo 👻" <foo@blurdybloop.com>', // sender address
-        to: 'wachiramet.pai@gmail.com', // list of receivers
+        to: 'wachiramet.p@gmail.com', // list of receivers
         subject: `แจ้งเพื่อพิจารณาแก้ไขปัญหา${snapshot.val().topic}`, // Subject line
         text: 'Hello world ?', // plain text body
         html: ` <br> <br> <br> <br>
@@ -51,7 +51,7 @@ exports.countlikechange = functions.database.ref('/issues/{issueid}/votes').onWr
 ${picture}` // html body
       }
       return transporter.sendMail(mailOptions).then(() => {
-        console.log('New unsubscription confirmation email sent to:', '"wachiramet.pai@gmail.com"')
+        console.log('New unsubscription confirmation email sent to:', '"wachiramet.p@gmail.com"')
       })
     }
   })
