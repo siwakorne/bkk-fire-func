@@ -30,15 +30,16 @@ exports.countlikechange = functions.database.ref('/issues/{issueid}/votes').onWr
         picture += '<img src="' + element.img + '" width="200px" height="auto">'
       })
       let nowDate = new Date()
+      let date = nowDate.toDateString()
       let mailOptions = {
         from: '"Fred Foo 👻" <foo@blurdybloop.com>', // sender address
         to: snapshot.val().issueType.email, // list of receivers
         subject: `แจ้งเพื่อพิจารณาแก้ไขปัญหา${snapshot.val().topic}`, // Subject line
         text: 'Hello world ?', // plain text body
         html: `
-<img src="">
+<center><img src="https://firebasestorage.googleapis.com/v0/b/bkk-project-51671.appspot.com/o/photos%2FBKK_GREEN%2BOrange1_150ppi.png?alt=media&token=14b433a6-7f78-4948-bbfc-8b80d149bef9" width="240px"></center>
 <br> <br> <br> <br>
-<h4 align="center"><B>${nowDate.toStringDate()}</B></h4>
+<h4 align="center"><B>${date}</B></h4>
 <br>
 <p><B>เรื่อง</B> แจ้งเพื่อพิจารณาแก้ไขปัญหา ${snapshot.val().topic}</p>
 <p><B>เรียน</B> ${snapshot.val().issueType.agency}</p>
@@ -55,7 +56,7 @@ ${picture}` // html body
       }
       return transporter.sendMail(mailOptions).then(() => {
         admin.database().ref('/issues/' + event.params.issueid).update({state: 'sended'})
-        console.log('New unsubscription confirmation email sent to:', '"wachiramet.p@gmail.com"')
+        console.log('New unsubscription confirmation email sent to:', snapshot.val().issueType.email)
       })
     }
   })
