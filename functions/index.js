@@ -24,15 +24,15 @@ exports.countlikechange = functions.database.ref('/issues/{issueid}/votes').onWr
   }
   admin.database().ref('/issues/' + event.params.issueid).once('value').then(function (snapshot) {
     console.log(snapshot.val())
-    if (size === 1) {
+    if (size === 5 && snapshot.val().state === 'wait') {
       let picture = ''
-      snapshot.val().photos.forEach(function(element) {
-        picture += '<img src="'+ element.img + '" width="200px" height="auto">'
+      snapshot.val().photos.forEach(function (element) {
+        picture += '<img src="' + element.img + '" width="200px" height="auto">'
       })
       let nowDate = new Date()
       let mailOptions = {
         from: '"Fred Foo 👻" <foo@blurdybloop.com>', // sender address
-        to: 'wachiramet.p@gmail.com', // list of receivers
+        to: snapshot.val().issueType.email, // list of receivers
         subject: `แจ้งเพื่อพิจารณาแก้ไขปัญหา${snapshot.val().topic}`, // Subject line
         text: 'Hello world ?', // plain text body
         html: `
@@ -41,7 +41,7 @@ exports.countlikechange = functions.database.ref('/issues/{issueid}/votes').onWr
 <h4 align="center"><B>${nowDate.toStringDate()}</B></h4>
 <br>
 <p><B>เรื่อง</B> แจ้งเพื่อพิจารณาแก้ไขปัญหา ${snapshot.val().topic}</p>
-<p><B>เรียน</B> กรมโยธาธิการและผังเมือง</p>
+<p><B>เรียน</B> ${snapshot.val().issueType.agency}</p>
 <p><B>สิ่งที่แนบมาด้วย</B> รูปถ่ายสถานที่ที่เกิดปัญหา</p>
 <br>
 <p><dd>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ตามที่บริษัท Bangkok issue จำกัด ได้รับมอบหมายให้จัดทำแอปพลิเคชัน Bangkok issue ขึ้นเพื่อรับเรื่องร้องทุกข์เกี่ยวกับปัญหาที่พบเจอใน กทม.
@@ -54,12 +54,12 @@ exports.countlikechange = functions.database.ref('/issues/{issueid}/votes').onWr
 ${picture}` // html body
       }
       return transporter.sendMail(mailOptions).then(() => {
+        admin.database().ref('/issues/' + event.params.issueid).update({state: 'sended'})
         console.log('New unsubscription confirmation email sent to:', '"wachiramet.p@gmail.com"')
       })
     }
   })
 
   console.log(size)
-
   // send mail with defined transport object
 })
