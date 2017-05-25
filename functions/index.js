@@ -29,13 +29,16 @@ exports.countlikechange = functions.database.ref('/issues/{issueid}/votes').onWr
       snapshot.val().photos.forEach(function(element) {
         picture += '<img src="'+ element.img + '" width="200px" height="auto">'
       })
+      let nowDate = new Date()
       let mailOptions = {
         from: '"Fred Foo 👻" <foo@blurdybloop.com>', // sender address
         to: 'wachiramet.p@gmail.com', // list of receivers
         subject: `แจ้งเพื่อพิจารณาแก้ไขปัญหา${snapshot.val().topic}`, // Subject line
         text: 'Hello world ?', // plain text body
-        html: ` <br> <br> <br> <br>
-<h4 align="center"><B>30 กุมภาพันธ์ 2660</B></h4>
+        html: `
+<img src="">
+<br> <br> <br> <br>
+<h4 align="center"><B>${nowDate.toStringDate()}</B></h4>
 <br>
 <p><B>เรื่อง</B> แจ้งเพื่อพิจารณาแก้ไขปัญหา ${snapshot.val().topic}</p>
 <p><B>เรียน</B> กรมโยธาธิการและผังเมือง</p>
