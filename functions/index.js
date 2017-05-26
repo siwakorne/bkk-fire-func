@@ -12,7 +12,7 @@ var transporter = nodemailer.createTransport({
   port: 25,
   auth: {
     user: 'bangkok.issue@gmail.com',
-    pass: '123456bkk'
+    pass: ''
   }
 })
 
